@@ -8,5 +8,5 @@ const usuario_1 = __importDefault(require("./routes/usuario"));
 const server = new Server_1.default();
 server.app.use('/user', usuario_1.default);
 server.start(() => {
-    console.log(`Servidor ejecutando, 3000, en ${server.port} `);
+    console.log(`Servidor ejecutando, en ${server.port} `);
 });
