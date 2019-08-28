@@ -6,5 +6,5 @@ const server = new Server();
 
 server.app.use('/user', userRoutes);
 server.start( () => {
-    console.log ( `Servidor corriendo y ejecutando en ${server.port} `);
+    console.log ( `Servidor ejecutando, 3000, en ${server.port} `);
 });
