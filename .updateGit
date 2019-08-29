@@ -1,0 +1,4 @@
+git add .
+git status 
+git commit -m "m1"
+git push origin master
