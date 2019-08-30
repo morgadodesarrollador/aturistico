@@ -11,15 +11,15 @@ export default class Token {
     static getJwtToken (payload: any): string{
         //payload: campos dentro del token (id, mail, username, password, avatar ...)
         return jwt.sign(
-            {usuario: payload},
-            this.seed,
-            { expiresIn: this.caducidad} )
+             { usuario: payload },
+               this.seed,
+             { expiresIn: this.caducidad } )
     }
     //método para compara token 4.50
-    static comprobarToken (userrToken: string){
+    static comprobarToken (userToken: string){
         return new Promise( (resolve, reject) => {
             //cuerpo de la promesa
-            jwt.verify(userrToken, this.seed, (err, decoded) => {
+            jwt.verify(userToken, this.seed, (err, decoded) => {
                 if (err){
                     //no confiar
                     reject();

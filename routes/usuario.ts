@@ -80,10 +80,38 @@ userRoutes.post ('/create', (req:Request, res:Response) => {
 //MDLcheckToken es una F.MDLW que se ejecuta antes que /update
 // [ fmdlw1, fmdlw2...]
 userRoutes.post ('/update', MDLcheckToken, (req:any, res:Response) => {
-    res.json({
-        ok: true,
-        usuario: req.usuario // creado en MDLckeckToken
-    })
+    //cuando llega aquí, el token ha sido verificado y en el viene el id del usuario
+    //y poder hacer la consulta a mongodb
+    const user = { //campos a modificar del usuario
+        nombre: req.body.nombre || req.usuario.nombre,
+        email: req.body.email || req.usuario.email,
+        avatar: req.body.avatar  || req.usuario.avatar,
+    };
+    //req.usuario._id: sale del token correpondiente al usuario q modifica sus datos
+    //in: _id, user, 'regresar reg actualizado, callback
+    UsuarioModel.findByIdAndUpdate(req.usuario._id, user, {new: true},
+        (err, userDB: any) => {
+            if ( err ) throw  err; //error grave de BD
+            if (!userDB)
+                res.json({
+                    ok:false,
+                    msg: 'Usuario con ese id no encontrado'
+            })
+            //el usuario existe, y hay q actualizar el nuevo token
+            const tokenUser = Token.getJwtToken({
+                _id    : userDB._id,
+                nombre : userDB.nombre,
+                email  : userDB.email,
+                avatar : userDB.avatar
+            });
+
+            res.json({
+                ok: true,
+                user: userDB,
+                token: tokenUser
+            })
+        })
+    
 });
 
 userRoutes.get ('/prueba', (req:Request, res:Response) => {
